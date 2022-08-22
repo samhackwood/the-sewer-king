@@ -9,10 +9,13 @@ const next = $('#next');
 const nextTwo = $('#nextTwo')
 const img = $('img');
 const text = $('#text');
-const slideClick = new Audio('slideclick.mp3');
-const office = new Audio('office.wav');
-const farm = new Audio('farm.wav');
-const sewerSound = new Audio('Sewer Ambience.m4a')
+const slideClick = new Audio('audio/slideclick.mp3');
+const office = new Audio('audio/office.wav');
+const farm = new Audio('audio/farm.wav');
+const sewerSound = new Audio('audio/Sewer Ambience.m4a');
+const yourName = $('#namebox');
+let niceToSue
+let theName;
 farm.volume = 0.1;
 office.volume = 0.1;
 sewerSound.volume = 0.1;
@@ -107,7 +110,14 @@ next.text("begin...")
 const beign = () => {
 text.text("Shepshed Police Station: It's 9am on a Monday morning as you sit down at your desk");
 disappear();
-img.attr("src","station.png")
+theName = $('#namebox').val();
+if (theName == '') {
+    theName = 'Mate'
+}
+
+yourName.hide();
+console.log(theName)
+img.attr("src","img/station.png")
 loopOffice();
 next.text("next...")
 }
@@ -127,13 +137,15 @@ const handleSayNothing = () => {
 
 btnOne.click(function(){
     if (text.text().includes("milky brew")) {
-    handleSayThanks()
+    handleSayThanks();
+    niceToSue == true;
     }
 })
 
 btnTwo.click(function(){
     if (text.text().includes("milky brew")) {
-    handleSayNothing()
+    handleSayNothing();
+    niceToSue == false;
     }
 })
 
@@ -150,6 +162,7 @@ next.click(function(){
 
     else if(next.text().includes("begin")){
         beign();
+        console.log(theName)
     }
 
     else if (text.text().includes('annoyed')) {
@@ -233,7 +246,7 @@ const handleWaitResults = () => {
     let handleNext = () => {
 if (text.text().includes('keys')) {
     text.text("DARTMOUTH PARK FARM")
-    img.attr("src","spooky-farmhouse.jpeg")
+    img.attr("src","/img/spooky-farmhouse.jpeg")
 }
 
     else if (text.text() == "DARTMOUTH PARK FARM") {
@@ -371,6 +384,27 @@ const handleBack = () => {
     text.text("You stoop down and squeeze your way through the narrow passageway, no longer caring about the foul liquid soaking into your shoes.")
 }
 
+const handleGetOut = () => {
+    disappear();
+    text.text("You go back, down a tall passage the wends and winds it's way underneath the town")
+}
+
+const handleFindPope = () => {
+    disappear();
+    text.text("Ignoring Pope's warning, you carry on regardless. You can't leave Pope trapped in this hellish place.")
+}
+
+const handleGoTowardsHim = () => {
+    disappear();
+    text.text("You slowly edge towards the figure. As you get closer you notice he is wearing a long black cloak, his face is shrouded with long matted hair and a wiery beard.")
+}
+
+const handleRunForYourLife = () => {
+    disappear();
+    text.text("You turn on your heel and run as fast as you can, trying to avoid the temptiation to look back and check he isn't following")
+
+}
+
 var doorSeen = false;
 
 let handleSewer = () => {
@@ -379,7 +413,7 @@ let handleSewer = () => {
         text.text("THE SEWER")
         farm.pause();
         sewerSound.play();
-        img.attr("src","sewer-drawing.jpeg")
+        img.attr("src","img/sewer-drawing.jpeg")
     }
 
     else if (text.text().includes("THE SEWER")) {
@@ -491,16 +525,107 @@ let handleSewer = () => {
     }
 
     else if (text.text().includes("metallic")) {
-        text.text("to be continued...")
+        text.text("You try to locate the sound, looking first left, then right, but struggle to find the cause of the noise")
     }
 
-    else if (text.text().includes("only a dead end")) {
-        text.text("to be continued...")
+    else if (text.text().includes("locate the sound")) {
+        text.text("At last, you hear a faint voice:")
     }
 
-    else{
-        text.text("discontinued...")
+    else if (text.text().includes("you hear a faint voice")) {
+        text.text("You recognise the voice at once! It's your old partner, DS Pope. But it can't be.. he went missing months ago, not long after it was revealed he was under investigation for taking bribes.")
     }
+
+    else if (text.text().includes("investigation for taking bribes")) {
+        if (theName == 'Mate') {
+            text.text(`"Pope? It's me, your partner!" You shout. "Where are you?"`)
+        } else {
+        text.text(`"Pope? It's me, ${theName}" You shout. "Where are you?"`)
+        }
+    }
+
+
+    else if (text.text().includes("Pope? It's me,")) {
+        text.text("You look around frantically, but there is only you in the narrow, slimy passage. Wherever he is, he's not here.")
+    }
+
+    else if (text.text().includes("frantically, but there is only")) {
+        text.text(`"${theName}, don't be a hero. Get out of here!"`)
+        next.hide();
+        showTwo("Go Back", "Find Pope")
+    }
+
+
+
+    else if (text.text().includes("wends and winds")) {
+        text.text(`"Crikey" you think, "Does this thing go on forever?"`)
+    }
+
+    else if (text.text().includes("Does this thing go on forever")) {
+        text.text(`Just as you are thinking of giving up, you feel the ground start to slope downwards and a wavering light appears ahead.`)
+    }
+
+    else if (text.text().includes("slope downwards and a wavering light")) {
+        text.text(`You peer towards the far end of the passage, and there... looming towards you... is a gigantic figure. He beckons you forwards...`)
+        showTwo("go towards him", "run for your life")
+    }
+
+    else if (text.text().includes("his face is shrouded with long matted hair")) {
+        text.text("At his feet, several large rats sit paitently. You are overcome with loathing and fear.")
+    }
+
+    else if (text.text().includes("paitently. You are overcome with loathing and")) {
+        text.text(`"Who are you?" You ask, trying not to show your disgust.`)
+    }
+
+    else if (text.text().includes("You ask, trying not to show your")) {
+        text.text(`"I AM THE SEWER KING"`)
+    }
+
+    else if (text.text().includes("I AM THE SEWER KING")) {
+        text.text(`How do I get out of here?`)
+    }
+
+    else if (text.text().includes("How do I get out of here?")) {
+        text.text(`He laughs a strangled, throaty laugh. "You can't leave. Not after all the effort I made to get you here."`)
+        disappear();
+        showThree("hear him out", "attack him", "flee");
+    }
+
+    else if (text.text().includes("look back and check he isn't following")) {
+        text.text(`You wind through more narrow passages until at last you reach an opening. There you spot it, leaning against the far wall, a rusty ladder.`)
+    }
+
+    else if (text.text().includes("leaning against the far wall, a rusty ladder")) {
+        text.text(`You set the ladder up under the a manhole cover and scramble up`)
+    }
+
+    else if (text.text().includes("ladder up under the a manhole cover and")) {
+        text.text(`With a heave you force the manhole cover and relish in the cool fresh air that washes over you.`)
+    }
+
+    else if (text.text().includes("a heave you force the manhole cover and relish in")) {
+        text.text(`You reach up and try to pull yourself out of the sewer and back above ground.`)
+    }
+
+    else if (text.text().includes("reach up and try to pull yourself out of the sewer and back")) {
+        text.text(`As you push off from the ladder, you feel it slip out from underneath you and suddenly you are dangling mid-air`)
+    }
+    
+    else if (text.text().includes(" push off from the ladder, you feel it slip out from underneath you and suddenly you are dangling")) {
+        text.text(`Your hands are thick with slime and begin to slip. There isn't time for you to react before you are falling...`)
+    }
+
+    else if (text.text().includes("are thick with slime and begin to slip.")) {
+        if (niceToSue == false) {
+        text.text(`You plummet through thr air and land awkwardly, banging your head in the process. The world goes dark... Game Over!!`)
+        }
+        else {
+            text.text(`Rather than tumbling down to the sewer floor, you find yourself hovering in the air.`)
+        }
+    }
+
+
 }
 
 
@@ -508,11 +633,21 @@ btnOne.click(function(){
     if (text.text().includes("four passageways"))
     {
     handleFront();
-}})
+} else if (text.text().includes("Get out of here")) {
+    handleGetOut();
+} else if (text.text().includes("He beckons you forwards...")) {
+    handleGoTowardsHim();
+} 
+
+})
 
 btnTwo.click(function(){
     if (text.text().includes("four passageways")) {
         handleBack();
+    } else if (text.text().includes("Get out of here")) {
+        handleFindPope();
+    } else if (text.text().includes("He beckons you forwards...")) {
+        handleRunForYourLife();
     }
 })
 
